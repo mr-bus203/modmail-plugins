@@ -77,8 +77,8 @@ class ArgAliases(commands.Cog):
         if name in self.dynamic_commands:
             self._unregister_dynamic_command(name)
 
-        async def dynamic_alias(cog, ctx: commands.Context, *, raw_args: str = ""):
-            await cog._execute_alias(ctx, name, raw_args)
+        async def dynamic_alias(ctx: commands.Context, *, raw_args: str = ""):
+            await self._execute_alias(ctx, name, raw_args)
 
         dynamic_alias.__name__ = f"argalias_{name}"
         decorated = checks.has_permissions(MOD_LEVEL)(dynamic_alias)
@@ -88,7 +88,6 @@ class ArgAliases(commands.Cog):
             help=f"Dynamic argument alias: {name}",
             brief=alias.get("description") or f"Runs the '{name}' argument alias.",
         )
-        command.cog = self
 
         self.bot.add_command(command)
         self.dynamic_commands[name] = command
